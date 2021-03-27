@@ -35,7 +35,7 @@ public class LoginController {
     }
 
     @GetMapping("/login")
-    public RedirectView login(@RequestParam(value = "username") String username,
+    public ResponseEntity<?> login(@RequestParam(value = "username") String username,
                               @RequestParam(value = "password") String password)
     {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
@@ -45,8 +45,8 @@ public class LoginController {
             throw new UsernameNotFoundException("User with username: " + username + " not found");
         }
 
-        RedirectView redirectView = new RedirectView();
-        redirectView.setUrl("/users");
-        return redirectView;
+        return true
+                ?new ResponseEntity<>(HttpStatus.OK)
+                :new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
     }
 }

@@ -48,5 +48,14 @@ public class RController {
                 ?new ResponseEntity<>(HttpStatus.OK)
                 :new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
     }
+    @PostMapping(value = "/create")
+    public ResponseEntity<?> create(@RequestParam("username") String name, @RequestParam("password") String password)
+    {
+        boolean create = userService.Create(name, password);
+        return create
+                ?new ResponseEntity<>(HttpStatus.OK)
+                :new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
+    }
+
 
 }

@@ -9,13 +9,15 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-
     @Autowired
     private final JwtTokenProvider jwtTokenProvider;
 
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     @Autowired
     public WebSecurityConfig(JwtTokenProvider jwtTokenProvider) {
@@ -36,12 +38,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/new").permitAll()
-                .anyRequest().authenticated()
+                .antMatchers("/create").permitAll()
+                .anyRequest().permitAll()
                 .and()
-                .formLogin().loginPage("/login")
+/*                .formLogin().loginPage("/login")
                 .permitAll()
-                .and()
+                .and()*/
                 .apply(new JwtConfigurer(jwtTokenProvider));
     }
 }
