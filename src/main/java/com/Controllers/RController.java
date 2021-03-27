@@ -4,6 +4,7 @@ import com.Model.ListOfUsers;
 import com.Model.User;
 import com.Repository.UserRepository;
 import com.UserService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,4 +39,14 @@ public class RController {
                 ?new ResponseEntity<>(HttpStatus.OK)
                 :new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
     }
+    @PutMapping(value ="/user/{id}")
+    public ResponseEntity<?> edit(@PathVariable Long id)
+    {
+        User user = userRepository.findById(id).orElseThrow();
+        boolean update = userService.Update(user, id);
+        return update
+                ?new ResponseEntity<>(HttpStatus.OK)
+                :new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
+    }
+
 }
