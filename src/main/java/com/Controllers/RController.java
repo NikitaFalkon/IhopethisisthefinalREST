@@ -6,22 +6,36 @@ import com.Repository.UserRepository;
 import com.UserService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.Optional;
 
 @RestController
 public class RController {
     @Autowired
+    RestTemplate restTemplate;
+    @Autowired
     UserRepository userRepository;
     @Autowired
     UserService userService;
     @GetMapping(value ="/user")
-    public User User(@RequestParam("username") String name)
+    public User User(@RequestParam("username") String name, @RequestParam("file") String file)
     {
         User user = userRepository.findByUsername(name);
+        HttpEntity<String> entity = new HttpEntity<String>(file);
+        ResponseEntity responce= restTemplate
+                .exchange("http://localhost:8060//write/{filename}?text="+user.toString()+"",
+                        HttpMethod.GET,
+                        entity,
+                        ResponseEntity.class,
+                        file);
         return user;
     }
     @GetMapping(value = "/users")
